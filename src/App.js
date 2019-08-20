@@ -1,10 +1,15 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+
+import history from './services/history';
+
+import { GlobalStyle } from './styles/global';
 
 function App() {
   return (
-    <div className="App">
-      Olar xuxu
-    </div>
+    <Router history={history}>
+      <GlobalStyle />
+    </Router>
   );
 }
 
