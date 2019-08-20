@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Button from '../Button';
 
@@ -6,7 +6,7 @@ import { api } from '../../services/api';
 
 import { Container } from './styles';
 
-export default function Todo({ isDone, text, id }) {
+export default function Todo({ isDone, text, id, handleDelete }) {
   const [_isDone, setIsDone] = useState(isDone);
   const [_text, setText] = useState(text);
 
@@ -19,26 +19,16 @@ export default function Todo({ isDone, text, id }) {
   async function handleEdit(id) {
     const todo = await api.post(`/update/${id}`, { text: _text });
 
-    setIsDone(todo.data.is_done);
+    setText(todo.data.text);
   }
 
-  function handleDelete() {}
-
   function handleChange(e) {
-    console.log(e.target.value);
+    setText(e.target.value);
   }
 
   return (
     <Container isDone={_isDone}>
-      <div
-        onChange={handleChange}
-        contentEditable={true}
-        suppressContentEditableWarning={true}
-      >
-        <p onChange={handleChange}>
-          <input value={_text} />
-        </p>
-      </div>
+      <input value={_text} onChange={handleChange} />
 
       <div>
         <Button background="green" onClick={() => toggleDone(id)}>

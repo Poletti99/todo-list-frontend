@@ -30,6 +30,13 @@ export default function Index() {
     setText('');
   }
 
+  async function handleDelete(id) {
+    await api.get(`/delete/${id}`);
+
+    const filteredTodos = todos.filter(todo => todo.id !== id);
+    setTodos(filteredTodos);
+  }
+
   return (
     <Container>
       <Header>
@@ -46,7 +53,13 @@ export default function Index() {
 
       <TodoList>
         {todos.map(todo => (
-          <Todo isDone={todo.is_done} id={todo.id} text={todo.text} />
+          <Todo
+            key={todo.id}
+            isDone={todo.is_done}
+            id={todo.id}
+            text={todo.text}
+            handleDelete={handleDelete}
+          />
         ))}
       </TodoList>
     </Container>
