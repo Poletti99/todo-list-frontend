@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { Container, Header, TodoCounter, TodoList } from './styles';
 import Todo from '../../components/Todo';
@@ -6,6 +6,8 @@ import { api } from '../../services/api';
 
 export default function Index() {
   const [todos, setTodos] = useState([]);
+  const [text, setText] = useState('');
+  const todosLenght = useMemo(() => todos.length, [todos.length]);
 
   useEffect(() => {
     async function getTodos() {
@@ -17,17 +19,30 @@ export default function Index() {
     getTodos();
   }, []);
 
+  function handleChange(e) {
+    setText(e.target.value);
+  }
+
+  async function handleAdd() {
+    const todo = await api.post('/register', { text });
+
+    setTodos([...todos, todo.data]);
+    setText('');
+  }
+
   return (
     <Container>
       <Header>
         <h1>Gerenciador de Todos</h1>
         <div>
-          <input type="text" />
-          <button type="button">Adicionar</button>
+          <input type="text" value={text} onChange={handleChange} />
+          <button type="button" onClick={handleAdd}>
+            Adicionar
+          </button>
         </div>
       </Header>
 
-      <TodoCounter>{todos.length} tarefas criadas</TodoCounter>
+      <TodoCounter>{todosLenght} tarefas criadas</TodoCounter>
 
       <TodoList>
         {todos.map(todo => (
