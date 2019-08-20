@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Container, Header, TodoCounter, TodoList } from './styles';
 import Todo from '../../components/Todo';
+import { api } from '../../services/api';
 
 export default function Index() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    async function getTodos() {
+      const todos = await api.get('/list');
+
+      setTodos(todos.data);
+    }
+
+    getTodos();
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -13,13 +26,13 @@ export default function Index() {
           <button type="button">Adicionar</button>
         </div>
       </Header>
-      <TodoCounter>counter</TodoCounter>
+
+      <TodoCounter>{todos.length} tarefas criadas</TodoCounter>
 
       <TodoList>
-        <Todo />
-        <Todo />
-        <Todo />
-        <Todo />
+        {todos.map(todo => (
+          <Todo isDone={todo.is_done} id={todo.id} text={todo.text} />
+        ))}
       </TodoList>
     </Container>
   );
