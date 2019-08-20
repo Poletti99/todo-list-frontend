@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Button from '../Button';
 
@@ -11,15 +12,29 @@ export default function Todo({ isDone, text, id, handleDelete, hasFocus }) {
   const [_text, setText] = useState(text);
 
   async function toggleDone(id) {
-    const todo = await api.post(`/update/${id}`, { is_done: !_isDone });
+    try {
+      const todo = await api.post(`/update/${id}`, { is_done: !_isDone });
 
-    setIsDone(todo.data.is_done);
+      setIsDone(todo.data.is_done);
+
+      toast.success(
+        _isDone ? 'ToDo reaberta com sucesso' : 'ToDo concluida com sucesso'
+      );
+    } catch (err) {
+      toast.error(_isDone ? 'Erro ao reabrir ToDo' : 'Erro ao concluir ToDo');
+    }
   }
 
   async function handleEdit(id) {
-    const todo = await api.post(`/update/${id}`, { text: _text });
+    try {
+      const todo = await api.post(`/update/${id}`, { text: _text });
 
-    setText(todo.data.text);
+      setText(todo.data.text);
+
+      toast.success('ToDo editada com sucesso');
+    } catch (err) {
+      toast.error('Erro ao editar ToDo');
+    }
   }
 
   function handleChange(e) {
@@ -52,10 +67,7 @@ export default function Todo({ isDone, text, id, handleDelete, hasFocus }) {
         <Button background="green" onClick={() => toggleDone(id)}>
           {_isDone ? 'Reabrir' : 'Concluir'}
         </Button>
-
-        <Button onClick={() => handleEdit(id)} isDisable={_isDone}>
-          Salvar
-        </Button>
+        
         <Button onClick={() => handleDelete(id)}>Deletar</Button>
       </div>
     </Container>

@@ -1,36 +1,52 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { toast } from 'react-toastify';
+
+import { api } from '../../services/api';
+
+import Todo from '../../components/Todo';
 
 import { Container, Header, TodoCounter, TodoList } from './styles';
-import Todo from '../../components/Todo';
-import { api } from '../../services/api';
 
 export default function Index() {
   const [todos, setTodos] = useState([]);
-  const [text, setText] = useState('');
   const todosLenght = useMemo(() => todos.length, [todos.length]);
 
   useEffect(() => {
     async function getTodos() {
-      const todos = await api.get('/list');
+      try {
+        const todos = await api.get('/list');
 
-      setTodos(todos.data);
+        setTodos(todos.data);
+      } catch (err) {
+        toast.error('Erro ao carregar ToDos');
+      }
     }
 
     getTodos();
   }, []);
 
   async function handleAdd() {
-    const todo = await api.post('/register', { text });
+    try {
+      const todo = await api.post('/register', { text: '' });
 
-    setTodos([...todos, todo.data]);
-    setText('');
+      setTodos([...todos, todo.data]);
+    } catch (err) {
+      toast.error('Erro ao criar ToDo');
+    }
   }
 
   async function handleDelete(id) {
-    await api.get(`/delete/${id}`);
+    try {
+      await api.get(`/delete/${id}`);
 
-    const filteredTodos = todos.filter(todo => todo.id !== id);
-    setTodos(filteredTodos);
+      const filteredTodos = todos.filter(todo => todo.id !== id);
+
+      setTodos(filteredTodos);
+
+      toast.success('ToDo deletada com sucesso');
+    } catch (err) {
+      toast.error('Erro ao deletar ToDo');
+    }
   }
 
   return (
