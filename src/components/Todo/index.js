@@ -1,22 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Button from '../Button';
+
+import { api } from '../../services/api';
 
 import { Container } from './styles';
 
 export default function Todo({ isDone, text, id }) {
-  function toggleDone() {}
+  const [_isDone, setIsDone] = useState(isDone);
+  const [_text, setText] = useState(text);
+
+  async function toggleDone(id) {
+    const todo = await api.post(`/update/${id}`, { is_done: !_isDone });
+
+    setIsDone(todo.data.is_done);
+  }
+
+  async function handleEdit(id) {
+    const todo = await api.post(`/update/${id}`, { text: _text });
+
+    setIsDone(todo.data.is_done);
+  }
+
   function handleDelete() {}
-  function handleEdit() {}
+
+  function handleChange(e) {
+    console.log(e.target.value);
+  }
 
   return (
-    <Container isDone={isDone}>
-      <div contentEditable={true} suppressContentEditableWarning={true}>
-        <p id={id}>{text}</p>
+    <Container isDone={_isDone}>
+      <div
+        onChange={handleChange}
+        contentEditable={true}
+        suppressContentEditableWarning={true}
+      >
+        <p onChange={handleChange}>
+          <input value={_text} />
+        </p>
       </div>
+
       <div>
         <Button background="green" onClick={() => toggleDone(id)}>
-          {isDone ? 'Reabrir' : 'Concluir'}
+          {_isDone ? 'Reabrir' : 'Concluir'}
         </Button>
         <Button onClick={() => handleEdit(id)}>Salvar</Button>
         <Button onClick={() => handleDelete(id)}>Deletar</Button>

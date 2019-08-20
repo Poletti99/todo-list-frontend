@@ -7,7 +7,10 @@ export const Container = styled.li`
   margin: 10px 0px;
 
   p {
-    color: ${props => (props.isDone ? 'green' : 'red')};
+    input {
+      color: ${props => (props.isDone ? 'green' : 'red')};
+      border: none;
+    }
   }
 
   > div {
