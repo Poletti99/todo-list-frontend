@@ -23,7 +23,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body, input, button {
-    font: 14px 'Roboto', sans-serif;
+    font: 16px 'Roboto', sans-serif;
   }
 
   ul {

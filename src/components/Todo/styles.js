@@ -5,11 +5,18 @@ export const Container = styled.li`
   justify-content: space-between;
   align-items: center;
   margin: 10px 0px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 
-  input {
+  > input {
     flex: 1;
-    color: ${props => (props.isDone ? 'green' : 'red')};
+    color: ${props => (props.isDone ? '#aaa8a8' : '#000')};
+    text-decoration: ${props => props.isDone && 'line-through'};
     border: none;
+
+    &:disabled {
+      background: none;
+    }
   }
 
   > div {

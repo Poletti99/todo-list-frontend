@@ -11,28 +11,6 @@ export const Header = styled.header`
   flex-direction: column;
   align-items: center;
   margin: 10px;
-
-  > div {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-
-    > input {
-      flex: 1;
-      height: 30px;
-      width: 400px;
-      border-radius: 4px;
-      border: 2px solid #7fc6e8;
-      padding: 5px 10px;
-      margin-right: 20px;
-    }
-
-    > button {
-      background: transparent;
-      border: 1px solid #ccc;
-      padding: 5px 10px;
-    }
-  }
 `;
 
 export const TodoCounter = styled.div`
@@ -42,7 +20,14 @@ export const TodoCounter = styled.div`
   background: #9ecfef;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding: 10px;
+  justify-content: space-between;
+
+  > button {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+  }
 `;
 
 export const TodoList = styled.ul`

@@ -19,10 +19,6 @@ export default function Index() {
     getTodos();
   }, []);
 
-  function handleChange(e) {
-    setText(e.target.value);
-  }
-
   async function handleAdd() {
     const todo = await api.post('/register', { text });
 
@@ -40,16 +36,15 @@ export default function Index() {
   return (
     <Container>
       <Header>
-        <h1>Gerenciador de Todos</h1>
-        <div>
-          <input type="text" value={text} onChange={handleChange} />
-          <button type="button" onClick={handleAdd}>
-            Adicionar
-          </button>
-        </div>
+        <h1>Gerenciador de ToDos</h1>
       </Header>
 
-      <TodoCounter>{todosLenght} tarefas criadas</TodoCounter>
+      <TodoCounter>
+        {todosLenght} tarefas criadas{' '}
+        <button type="button" onClick={handleAdd}>
+          Adicionar
+        </button>
+      </TodoCounter>
 
       <TodoList>
         {todos.map(todo => (
@@ -59,6 +54,7 @@ export default function Index() {
             id={todo.id}
             text={todo.text}
             handleDelete={handleDelete}
+            hasFocus={true}
           />
         ))}
       </TodoList>

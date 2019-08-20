@@ -6,7 +6,7 @@ import { api } from '../../services/api';
 
 import { Container } from './styles';
 
-export default function Todo({ isDone, text, id, handleDelete }) {
+export default function Todo({ isDone, text, id, handleDelete, hasFocus }) {
   const [_isDone, setIsDone] = useState(isDone);
   const [_text, setText] = useState(text);
 
@@ -26,15 +26,36 @@ export default function Todo({ isDone, text, id, handleDelete }) {
     setText(e.target.value);
   }
 
+  function handleBlur(id) {
+    if (!_text) {
+      handleDelete(id);
+      return;
+    }
+
+    if (text === _text) return;
+
+    handleEdit(id);
+  }
+
   return (
     <Container isDone={_isDone}>
-      <input value={_text} onChange={handleChange} />
+      <input
+        value={_text}
+        onChange={handleChange}
+        disabled={_isDone}
+        autoFocus={hasFocus}
+        placeholder="Digite aqui sua tarefa..."
+        onBlur={() => handleBlur(id)}
+      />
 
       <div>
         <Button background="green" onClick={() => toggleDone(id)}>
           {_isDone ? 'Reabrir' : 'Concluir'}
         </Button>
-        <Button onClick={() => handleEdit(id)}>Salvar</Button>
+
+        <Button onClick={() => handleEdit(id)} isDisable={_isDone}>
+          Salvar
+        </Button>
         <Button onClick={() => handleDelete(id)}>Deletar</Button>
       </div>
     </Container>
